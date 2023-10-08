@@ -1,12 +1,4 @@
-import socket
-
-# Inisialisasi server socket
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ('localhost', 8888)
-server_socket.bind(server_address)
-server_socket.listen(5)
-
-print("Voting server is ready.")
+from xmlrpc.server import SimpleXMLRPCServer
 
 candidates = {
     "1": "Prabowo Subianto",
@@ -16,36 +8,33 @@ candidates = {
 
 votes = {candidate_id: 0 for candidate_id in candidates.keys()}
 
-while True:
-    print("Menungu Koneksi...")
-    client_socket, client_address = server_socket.accept()
-    print(f"Connection from {client_address}")
+def is_valid_candidate(candidate_id):
+    return candidate_id in candidates
 
-    # Menerima pesan dari client
-    message = client_socket.recv(1024).decode()
+def get_candidates():
+    return candidates
 
-    if message.startswith("VOTE"):
-        candidate_id = message.split()[1]
-        if candidate_id in candidates:
-            votes[candidate_id] += 1
-            print(f"{candidates[candidate_id]} menerima 1 suara.")
-        else:
-            print("Nomer kandidat tidak valid")
+def vote(candidate_id):
+    if is_valid_candidate(candidate_id):
+        votes[candidate_id] += 1
+        return f"Vote untuk {candidates[candidate_id]} telah di catat."
+    else:
+        return "ID kandidat tidak valid."
 
-    elif message == "RESULTS":
-        print("Mengirim hasil pemilihan ke client...")
-        result_str = "\n".join([f"{candidates[candidate_id]}: {votes[candidate_id]} votes" for candidate_id in votes.keys()])
-        client_socket.send(result_str.encode())
+def get_results():
+    return votes
 
-    elif message == "CANDIDATES":
-        print("Mengirim daftar kandidat ke client...")
-        candidate_list = "\n".join([f"{candidate_id}. {candidates[candidate_id]}" for candidate_id in candidates.keys()])
-        client_socket.send(candidate_list.encode())
+if __name__ == "__main__":
+    server = SimpleXMLRPCServer(('localhost', 8888))
+    server.register_function(get_candidates, 'get_candidates')
+    server.register_function(vote, 'vote')
+    server.register_function(get_results, 'get_results')
 
-    elif message == "EXIT":
-        print("Keluar dari program voting...")
-        break
+    print("Server siap menerima voting")
+    while True:
+        try:
+            server.handle_request()
+        except KeyboardInterrupt:
+            print("\nServer stopped.")
+            break
 
-    client_socket.close()
-
-server_socket.close()
