@@ -1,9 +1,11 @@
 import requests
 
-url = 'https://restful-api.dev/'
-data = {'key': 'value'}
-response = requests.post(url, data=data)
+url = 'https://api.restful-api.dev/objects'
+response = requests.get(url)
 
-print('POST Request:')
+print('GET Request:')
 print('Status Code:', response.status_code)
-print('Response Content (HTML):', response.text)
+
+# Menyimpan hasil respons ke dalam file .txt
+with open('./TP_MOD_06_1301213389_MUHAMMADFATIHYUMNA/Respond/get_response.json', 'w') as file:
+    file.write(response.text)

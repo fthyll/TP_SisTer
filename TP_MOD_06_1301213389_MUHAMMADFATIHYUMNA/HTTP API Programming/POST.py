@@ -1,36 +1,21 @@
 import requests
 
-# Fungsi untuk mengirim permintaan
-def send_request():
-    method = input("Masukkan metode (GET, POST, PUT, DELETE): ").upper()
-    url = input("Masukkan URL: ")
-    data = {}
+url = 'https://api.restful-api.dev/objects'  # URL tempat Anda ingin membuat POST request
+data = {
+    "name": "Apple MacBook Pro 16",
+    "data": {
+        "year": 2019,
+        "price": 1849.99,
+        "CPU model": "Intel Core i9",
+        "Hard disk size": "1 TB"
+    }
+}
 
-    if method in ['POST', 'PUT']:
-        key = input("Masukkan key: ")
-        value = input("Masukkan value: ")
-        data = {key: value}
+response = requests.post(url, json=data)  # Menggunakan metode POST
 
-    response = None
+print('POST Request:')
+print('Status Code:', response.status_code)
 
-    if method == 'GET':
-        response = requests.get(url)
-    elif method == 'POST':
-        response = requests.post(url, data=data)
-    elif method == 'PUT':
-        response = requests.put(url, data=data)
-    elif method == 'DELETE':
-        response = requests.delete(url)
-
-    if response:
-        print('Status Code:', response.status_code)
-        print('Response Content (HTML):', response.text)
-    else:
-        print('Metode tidak valid.')
-
-# Meminta pengguna untuk mengirim permintaan
-while True:
-    send_request()
-    another = input("Kirim permintaan lagi? (y/n): ")
-    if another.lower() != 'y':
-        break
+# Menyimpan hasil respons ke dalam file .json
+with open('./TP_MOD_06_1301213389_MUHAMMADFATIHYUMNA/Respond/post_response.json', 'w') as file:
+    file.write(response.text)
