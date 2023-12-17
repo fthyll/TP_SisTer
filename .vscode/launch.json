@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/muhammadfatihyumna/Desktop/TP_SisTer/TP_MOD_12_1301213389_MUHAMMADFATIHYUMNA",
-      "program": "/Users/muhammadfatihyumna/Desktop/TP_SisTer/TP_MOD_12_1301213389_MUHAMMADFATIHYUMNA/build/Debug/outDebug"
+      "cwd": "/Users/muhammadfatihyumna/Desktop/TP_SisTer/TP_MOD_14_1301213389_MUHAMMADFATIHYUMNA",
+      "program": "/Users/muhammadfatihyumna/Desktop/TP_SisTer/TP_MOD_14_1301213389_MUHAMMADFATIHYUMNA/build/Debug/outDebug"
     }
   ]
 }
